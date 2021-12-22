@@ -58,4 +58,7 @@ private:
 public:
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE class UCActionData* GetCurrent() { return Datas[(int32)Type]; }
+
+public:
+	void DoAction();
 };
