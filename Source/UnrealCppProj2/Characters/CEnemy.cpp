@@ -7,10 +7,17 @@
 #include "Components/CMontagesComponent.h"
 #include "Components/CActionComponent.h"
 
+#include "Components/WidgetComponent.h"
+#include "Widgets/CUserWidget_Health.h"
+#include "Widgets/CUserWidget_Name.h"
+
 ACEnemy::ACEnemy()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	
+
+	CHelpers::CreateComponent<UWidgetComponent>(this, &NameWidget, "NameWidget", GetMesh());
+	CHelpers::CreateComponent<UWidgetComponent>(this, &HealthWidget, "HealthWidget", GetMesh());
+
 	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
 	CHelpers::CreateActorComponent<UCMontagesComponent>(this, &Montages, "Montages");
@@ -29,6 +36,22 @@ ACEnemy::ACEnemy()
 
 	GetCharacterMovement()->RotationRate = FRotator(0, 720, 0);
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	TSubclassOf<UCUserWidget_Name> nameClass;
+	CHelpers::GetClass<UCUserWidget_Name>(&nameClass, "WidgetBlueprint'/Game/Widgets/WB_NAme.WB_Name_C'");
+
+	NameWidget->SetWidgetClass(nameClass);
+	NameWidget->SetRelativeLocation(FVector(0, 0, 240));
+	NameWidget->SetDrawSize(FVector2D(240, 30));
+	NameWidget->SetWidgetSpace(EWidgetSpace::Screen);
+
+	TSubclassOf<UCUserWidget_Health> healthClass;
+	CHelpers::GetClass<UCUserWidget_Health>(&healthClass, "WidgetBlueprint'/Game/Widgets/WB_Health.WB_Health_C'");
+
+	HealthWidget->SetWidgetClass(healthClass);
+	HealthWidget->SetRelativeLocation(FVector(0, 0, 190));
+	HealthWidget->SetDrawSize(FVector2D(120, 20));
+	HealthWidget->SetWidgetSpace(EWidgetSpace::Screen);
 }
 
 void ACEnemy::BeginPlay()
