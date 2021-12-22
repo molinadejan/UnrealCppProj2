@@ -11,6 +11,9 @@
 #include "Widgets/CUserWidget_Health.h"
 #include "Widgets/CUserWidget_Name.h"
 
+#include "Materials/MaterialInstanceConstant.h"
+#include "Materials/MaterialInstanceDynamic.h"
+
 ACEnemy::ACEnemy()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -56,8 +59,30 @@ ACEnemy::ACEnemy()
 
 void ACEnemy::BeginPlay()
 {
+	UMaterialInstanceConstant* body;
+	UMaterialInstanceConstant* logo;
+
+	CHelpers::GetAssetDynamic<UMaterialInstanceConstant>(&body, "MaterialInstanceConstant'/Game/Materials/M_UE4Man_Body_Inst.M_UE4Man_Body_Inst'");
+	CHelpers::GetAssetDynamic<UMaterialInstanceConstant>(&logo, "MaterialInstanceConstant'/Game/Materials/M_UE4Man_ChestLogo_Inst.M_UE4Man_ChestLogo_Inst'");
+
+	BodyMaterial = UMaterialInstanceDynamic::Create(body, this);
+	LogoMaterial = UMaterialInstanceDynamic::Create(logo, this);
+
+	GetMesh()->SetMaterial(0, BodyMaterial);
+	GetMesh()->SetMaterial(1, LogoMaterial);
+
 	Super::BeginPlay();
-	
+
+	State->OnStateTypeChanged.AddDynamic(this, &ACEnemy::OnStateTypeChanged);
+
+	NameWidget->InitWidget();
+	Cast<UCUserWidget_Name>(NameWidget->GetUserWidgetObject())->SetNameText(GetActorLabel());
+
+	HealthWidget->InitWidget();
+	Cast<UCUserWidget_Health>(HealthWidget->GetUserWidgetObject())->Update(Status->GetHealth(),
+		Status->GetMaxHealth());
+
+	//Action->SetUnarmedMode();
 }
 
 void ACEnemy::Tick(float DeltaTime)
@@ -80,4 +105,9 @@ float ACEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AContro
 	CLog::Log(Damage);
 
 	return 0.0f;
+}
+
+void ACEnemy::OnStateTypeChanged(EStateType InPrevType, EStateType InNextType)
+{
+
 }

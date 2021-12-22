@@ -10,7 +10,6 @@ UCStateComponent::UCStateComponent()
 void UCStateComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void UCStateComponent::ChangeType(EStateType InType)
