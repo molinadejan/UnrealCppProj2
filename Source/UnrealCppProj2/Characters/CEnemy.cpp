@@ -1,5 +1,6 @@
 #include "CEnemy.h"
 #include "Global.h"
+#include "Actions/CActionData.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "Components/CStatusComponent.h"
@@ -41,7 +42,7 @@ ACEnemy::ACEnemy()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	TSubclassOf<UCUserWidget_Name> nameClass;
-	CHelpers::GetClass<UCUserWidget_Name>(&nameClass, "WidgetBlueprint'/Game/Widgets/WB_NAme.WB_Name_C'");
+	CHelpers::GetClass<UCUserWidget_Name>(&nameClass, "WidgetBlueprint'/Game/Widgets/WB_Name2.WB_Name2_C'");
 
 	NameWidget->SetWidgetClass(nameClass);
 	NameWidget->SetRelativeLocation(FVector(0, 0, 240));
@@ -49,7 +50,7 @@ ACEnemy::ACEnemy()
 	NameWidget->SetWidgetSpace(EWidgetSpace::Screen);
 
 	TSubclassOf<UCUserWidget_Health> healthClass;
-	CHelpers::GetClass<UCUserWidget_Health>(&healthClass, "WidgetBlueprint'/Game/Widgets/WB_Health.WB_Health_C'");
+	CHelpers::GetClass<UCUserWidget_Health>(&healthClass, "WidgetBlueprint'/Game/Widgets/WB_Health2.WB_Health2_C'");
 
 	HealthWidget->SetWidgetClass(healthClass);
 	HealthWidget->SetRelativeLocation(FVector(0, 0, 190));
@@ -74,7 +75,7 @@ void ACEnemy::BeginPlay()
 	Super::BeginPlay();
 
 	State->OnStateTypeChanged.AddDynamic(this, &ACEnemy::OnStateTypeChanged);
-
+	
 	NameWidget->InitWidget();
 	Cast<UCUserWidget_Name>(NameWidget->GetUserWidgetObject())->SetNameText(GetActorLabel());
 
@@ -82,7 +83,7 @@ void ACEnemy::BeginPlay()
 	Cast<UCUserWidget_Health>(HealthWidget->GetUserWidgetObject())->Update(Status->GetHealth(),
 		Status->GetMaxHealth());
 
-	//Action->SetUnarmedMode();
+	Action->SetUnarmedMode();
 }
 
 void ACEnemy::Tick(float DeltaTime)
@@ -100,14 +101,58 @@ void ACEnemy::ChangeColor(FLinearColor InColor)
 float ACEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
-	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
-	
-	CLog::Log(Damage);
+	//Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+	//CLog::Log(Damage);
 
-	return 0.0f;
+	DamageInstigator = EventInstigator;
+	DamageValue = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+	State->SetHittedMode();
+
+	return Status->GetHealth();
 }
 
 void ACEnemy::OnStateTypeChanged(EStateType InPrevType, EStateType InNextType)
 {
+	switch (InNextType)
+	{
+	case EStateType::Hitted:
+		Hitted();
+		break;
+	}
+}
 
+void ACEnemy::RestoreColor()
+{
+	FLinearColor color = Action->GetCurrent()->GetEquipmentColor();
+	ChangeColor(color);
+}
+
+void ACEnemy::Hitted()
+{
+	Status->SubHealth(DamageValue);
+
+	Cast<UCUserWidget_Health>(HealthWidget->GetUserWidgetObject())->Update(
+		Status->GetHealth(),
+		Status->GetMaxHealth()
+	);
+
+	DamageValue = 0.0f;
+
+	Status->SetStop();
+	Montages->PlayHitted();
+
+	FVector start = GetActorLocation();
+	FVector target = DamageInstigator->GetPawn()->GetActorLocation();
+
+	SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, target));
+	DamageInstigator = NULL;
+
+	FVector direction = target - start;
+	direction.Normalize();
+
+	LaunchCharacter(-direction * LaunchAmount, true, false);
+
+	ChangeColor(FLinearColor(1, 0, 0, 1));
+	UKismetSystemLibrary::K2_SetTimer(this, "RestoreColor", 0.1f, false);
 }

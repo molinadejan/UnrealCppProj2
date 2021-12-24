@@ -32,4 +32,10 @@ public:
 	virtual void OnAttachmentEndOverlap(class ACharacter* InAttacker,
 		class AActor* InAttackCauser,
 		class ACharacter* InOtherCharacter) override;
+	
+	virtual void OnAttachmentCollision() override;
+	virtual void OffAttachmentCollision() override;
+
+private:
+	TArray<class ACharacter*> HittedCharacters;
 };

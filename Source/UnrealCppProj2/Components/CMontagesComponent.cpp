@@ -59,3 +59,8 @@ void UCMontagesComponent::PlayBackstep()
 {
 	PlayAnimMontage(EStateType::Backstep);
 }
+
+void UCMontagesComponent::PlayHitted()
+{
+	PlayAnimMontage(EStateType::Hitted);
+}

@@ -50,4 +50,10 @@ public:
 		virtual void OnAttachmentEndOverlap(class ACharacter* InAttacker,
 			class AActor* InAttackCauser,
 			class ACharacter* InOtherCharacter) { };
+
+	UFUNCTION()
+		virtual void OnAttachmentCollision() {};
+
+	UFUNCTION()
+		virtual void OffAttachmentCollision() {};
 };

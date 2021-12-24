@@ -31,6 +31,10 @@ public:
 		AController* EventInstigator, AActor* DamageCauser) override;
 
 private:
+	UPROPERTY(EditAnywhere, Category = "Hitted")
+		float LaunchAmount = 100.0f;
+
+private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCStatusComponent* Status;
 
@@ -53,4 +57,14 @@ protected:
 private:
 	UFUNCTION()
 		void OnStateTypeChanged(EStateType InPrevType, EStateType InNextType);
+
+	UFUNCTION()
+		void RestoreColor();
+
+private:
+	class AController* DamageInstigator;
+	float DamageValue;
+
+private:
+	void Hitted();
 };

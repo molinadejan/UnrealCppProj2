@@ -16,6 +16,8 @@ class ACharacter*, InAttacker,
 class AActor*, InAttackCauser,
 class ACharacter*, InOtherCharacter);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAttachmentCollision);
+
 UCLASS()
 class UNREALCPPPROJ2_API ACAttachment : public AActor
 {
@@ -57,6 +59,12 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 		FAttachmentEndOverlap OnAttachmentEndOverlap;
+
+	UPROPERTY(BlueprintAssignable)
+		FAttachmentCollision OnAttachmentCollision;
+
+	UPROPERTY(BlueprintAssignable)
+		FAttachmentCollision OffAttachmentCollision;
 
 private:
 	TArray<class UShapeComponent*> ShapeComponents;
