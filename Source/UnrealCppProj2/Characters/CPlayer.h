@@ -64,7 +64,10 @@ public:
 	void End_Backstep();
 
 private:
+	void OnFist();
 	void OnOneHand();
+	void OnTwoHand();
+	void OnWarp();
 	void OnDoAction();
 
 private:

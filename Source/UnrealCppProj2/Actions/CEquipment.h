@@ -64,4 +64,10 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 		FUnEquipmentDelegate OnUnEquipmentDelegate;
+
+private:
+	bool bEquipped;
+
+public:
+	FORCEINLINE const bool* GetEquipped() { return &bEquipped; }
 };

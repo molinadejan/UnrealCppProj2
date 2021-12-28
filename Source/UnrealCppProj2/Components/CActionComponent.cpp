@@ -48,9 +48,12 @@ void UCActionComponent::SetMode(EActionType InType)
 	}
 
 	// ¹«±â ÀåÂø
-	ACEquipment* equipment = Datas[(int32)InType]->GetEquipment();
-	CheckNull(equipment);
-	equipment->Equip();
+	if (!!Datas[(int32)InType])
+	{
+		ACEquipment* equipment = Datas[(int32)InType]->GetEquipment();
+		CheckNull(equipment);
+		equipment->Equip();
+	}
 
 	ChangeType(InType);
 }
@@ -65,15 +68,20 @@ void UCActionComponent::SetUnarmedMode()
 		equipment->UnEquip();
 	}
 
-	if (!!Datas[(int32)EActionType::Unarmed])
+	/*if (!!Datas[(int32)EActionType::Unarmed])
 	{
 		ACEquipment* equipment = Datas[(int32)EActionType::Unarmed]->GetEquipment();
 		CheckNull(equipment);
 
 		equipment->Equip();
-	}
+	}*/
 
 	ChangeType(EActionType::Unarmed);
+}
+
+void UCActionComponent::SetFistMode()
+{
+	SetMode(EActionType::Fist);
 }
 
 void UCActionComponent::SetOneHandMode()
@@ -84,6 +92,11 @@ void UCActionComponent::SetOneHandMode()
 void UCActionComponent::SetTwoHandMode()
 {
 	SetMode(EActionType::TwoHand);
+}
+
+void UCActionComponent::SetWarpMode()
+{
+	SetMode(EActionType::Warp);
 }
 
 void UCActionComponent::DoAction()

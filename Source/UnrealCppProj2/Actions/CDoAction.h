@@ -56,4 +56,10 @@ public:
 
 	UFUNCTION()
 		virtual void OffAttachmentCollision() {};
+
+protected:
+	const bool* bEquipped;
+
+public:
+	FORCEINLINE void SetEquipped(const bool* InEquipped) { bEquipped = InEquipped; }
 };

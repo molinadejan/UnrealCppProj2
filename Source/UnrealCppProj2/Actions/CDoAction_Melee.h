@@ -38,4 +38,8 @@ public:
 
 private:
 	TArray<class ACharacter*> HittedCharacters;
+
+private:
+	UFUNCTION()
+		void RestoreDilation();
 };

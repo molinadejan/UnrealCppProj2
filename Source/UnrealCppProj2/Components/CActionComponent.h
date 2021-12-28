@@ -8,8 +8,10 @@ UENUM(BlueprintType)
 enum class EActionType : uint8
 {
 	Unarmed,
+	Fist,
 	OneHand,
 	TwoHand,
+	Warp,
 	Max
 };
 
@@ -34,10 +36,16 @@ public:
 		FORCEINLINE bool IsUnarmedMode() { return Type == EActionType::Unarmed; }
 
 	UFUNCTION(BlueprintPure)
+		FORCEINLINE bool IsFistMode() { return Type == EActionType::Fist; }
+
+	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsOneHandMode() { return Type == EActionType::OneHand; };
 
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsTwoHandMode() { return Type == EActionType::TwoHand; };
+
+	UFUNCTION(BlueprintPure)
+		FORCEINLINE bool IsWarpMode() { return Type == EActionType::Warp; };
 
 	UPROPERTY(BlueprintAssignable)
 		FActionTypeChanged OnActionTypeChanged;
@@ -48,8 +56,10 @@ private:
 
 public:
 	void SetUnarmedMode();
+	void SetFistMode();
 	void SetOneHandMode();
 	void SetTwoHandMode();
+	void SetWarpMode();
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")

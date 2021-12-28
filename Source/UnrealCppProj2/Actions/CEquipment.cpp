@@ -1,4 +1,7 @@
 #include "CEquipment.h"
+
+#include <string>
+
 #include "Global.h"
 #include "Characters/ICharacter.h"
 
@@ -54,11 +57,15 @@ void ACEquipment::Begin_Equip_Implementation()
 
 void ACEquipment::End_Equip_Implementation()
 {
+	bEquipped = true;
+
 	State->SetIdleMode();
 }
 
 void ACEquipment::UnEquip_Implementation()
 {
+	bEquipped = false;
+
 	if (OnUnEquipmentDelegate.IsBound())
 		OnUnEquipmentDelegate.Broadcast();
 
