@@ -15,7 +15,8 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter)
         Attachment = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACAttachment>
             (AttachmentClass, transform, InOwnerCharacter);
 
-        Attachment->SetActorLabel(InOwnerCharacter->GetActorLabel() + "_Attachment");
+        //Attachment->SetActorLabel(InOwnerCharacter->GetActorLabel() + "_Attachment");
+        Attachment->SetActorLabel(GetLabelName(InOwnerCharacter, "Attachment"));
 
         UGameplayStatics::FinishSpawningActor(Attachment, transform);
     }
@@ -28,7 +29,8 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter)
         Equipment->AttachToComponent(InOwnerCharacter->GetMesh(),
             FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
 
-        Equipment->SetActorLabel(InOwnerCharacter->GetActorLabel() + "_Equipment");
+        //Equipment->SetActorLabel(InOwnerCharacter->GetActorLabel() + "_Equipment");
+        Equipment->SetActorLabel(GetLabelName(InOwnerCharacter, "Equipment"));
 
         Equipment->SetData(EquipmentData);
         Equipment->SetColor(EquipmentColor);
@@ -50,7 +52,8 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter)
         DoAction->AttachToComponent(InOwnerCharacter->GetMesh(),
             FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
 
-        DoAction->SetActorLabel(InOwnerCharacter->GetActorLabel() + "_DoAction");
+        //DoAction->SetActorLabel(InOwnerCharacter->GetActorLabel() + "_DoAction");
+        DoAction->SetActorLabel(GetLabelName(InOwnerCharacter, "_DoAction"));
 
         DoAction->SetDatas(DoActionDatas);
 
@@ -71,4 +74,16 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter)
                 &ACDoAction::OffAttachmentCollision);
         }
     }
+}
+
+FString UCActionData::GetLabelName(ACharacter* InOwnerCharacter, FString InName)
+{
+    FString str;
+    str.Append(InOwnerCharacter->GetActorLabel());
+    str.Append("_");
+    str.Append("InName");
+    str.Append("_");
+    str.Append(GetName().Replace(L"DA_", L""));
+
+    return str;
 }

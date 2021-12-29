@@ -71,4 +71,5 @@ public:
 
 public:
 	void DoAction();
+	void OffAllCollision();
 };

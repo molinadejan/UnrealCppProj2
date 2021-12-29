@@ -8,17 +8,47 @@
 
 void ACDoAction_Warp::DoAction()
 {
-	Super::DoAction();
+	//Super::DoAction();
+
+	CheckFalse(*bEquipped);
+
+	FRotator rotator;
+	CheckFalse(GetCursorLocationAndRotation(Location, rotator));
+
+	CheckFalse(State->IsIdleMode());
+	State->SetActionMode();
+
+	Decal->SetWorldLocation(Location);
+	Decal->SetWorldRotation(rotator);
+
+	OwnerCharacter->PlayAnimMontage(Datas[0].AnimMontage,
+		Datas[0].PlayRatio,
+		Datas[0].StartSection);
+
+	Datas[0].bCanMove ? Status->SetMove() : Status->SetStop();
 }
 
 void ACDoAction_Warp::Begin_DoAction()
 {
-	Super::Begin_DoAction();
+	//Super::Begin_DoAction();
+
+	FTransform transform = Datas[0].EffectTransform;
+	//transform.AddToTranslation(OwnerCharacter->GetActorLocation());
+	//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Datas[0].Effect, transform);
+
+	UGameplayStatics::SpawnEmitterAttached(Datas[0].Effect, OwnerCharacter->GetMesh(),
+		"", transform.GetLocation(), FRotator(transform.GetRotation()),
+		transform.GetScale3D());
 }
 
 void ACDoAction_Warp::End_DoAction()
 {
-	Super::End_DoAction();
+	//Super::End_DoAction();
+	OwnerCharacter->SetActorLocation(Location);
+	Location = FVector::ZeroVector;
+
+	State->SetIdleMode();
+	Status->SetMove();
 }
 
 void ACDoAction_Warp::Tick(float DeltaTime)
