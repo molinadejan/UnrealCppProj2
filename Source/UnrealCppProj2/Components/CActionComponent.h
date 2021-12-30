@@ -12,6 +12,8 @@ enum class EActionType : uint8
 	OneHand,
 	TwoHand,
 	Warp,
+	FireStorm,
+	IceBall,
 	Max
 };
 
@@ -39,13 +41,19 @@ public:
 		FORCEINLINE bool IsFistMode() { return Type == EActionType::Fist; }
 
 	UFUNCTION(BlueprintPure)
-		FORCEINLINE bool IsOneHandMode() { return Type == EActionType::OneHand; };
+		FORCEINLINE bool IsOneHandMode() { return Type == EActionType::OneHand; }
 
 	UFUNCTION(BlueprintPure)
-		FORCEINLINE bool IsTwoHandMode() { return Type == EActionType::TwoHand; };
+		FORCEINLINE bool IsTwoHandMode() { return Type == EActionType::TwoHand; }
 
 	UFUNCTION(BlueprintPure)
-		FORCEINLINE bool IsWarpMode() { return Type == EActionType::Warp; };
+		FORCEINLINE bool IsWarpMode() { return Type == EActionType::Warp; }
+
+	UFUNCTION(BlueprintPure)
+		FORCEINLINE bool IsFireStormMode() { return Type == EActionType::FireStorm; }
+
+	UFUNCTION(BlueprintPure)
+		FORCEINLINE bool IsIceBallMode() { return Type == EActionType::IceBall; }
 
 	UPROPERTY(BlueprintAssignable)
 		FActionTypeChanged OnActionTypeChanged;
@@ -60,6 +68,8 @@ public:
 	void SetOneHandMode();
 	void SetTwoHandMode();
 	void SetWarpMode();
+	void SetFireStormMode();
+	void SetIceBallMode();
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
@@ -72,4 +82,5 @@ public:
 public:
 	void DoAction();
 	void OffAllCollision();
+	void DoAim(bool InAim);
 };

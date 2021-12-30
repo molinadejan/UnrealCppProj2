@@ -71,10 +71,14 @@ private:
 	void OnOneHand();
 	void OnTwoHand();
 	void OnWarp();
+	void OnFireStorm();
+	void OnIceBall();
 	void OnTarget();
 	void OnTargetLeft();
 	void OnTargetRight();
 	void OnDoAction();
+	void OnAim();
+	void OffAim();
 
 private:
 	class UMaterialInstanceDynamic* BodyMaterial;
