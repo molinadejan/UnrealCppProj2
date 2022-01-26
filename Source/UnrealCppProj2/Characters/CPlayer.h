@@ -47,6 +47,9 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCTargetComponent* Target;
 
+	UPROPERTY(VisibleDefaultsOnly)
+		TSubclassOf<class UCUserWidget_ActionList> ActionListClass;
+
 private:
 	UFUNCTION()
 		void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
@@ -79,11 +82,18 @@ private:
 	void OnDoAction();
 	void OnAim();
 	void OffAim();
+	void OnViewActionList();
+	void OffViewActionList();
 
 private:
 	class UMaterialInstanceDynamic* BodyMaterial;
 	class UMaterialInstanceDynamic* LogoMaterial;
+	class UCUserWidget_ActionList* ActionList;
 
 public:
 	virtual void ChangeColor(FLinearColor InColor) override;
+
+public:
+	FORCEINLINE class UCUserWidget_ActionList* GetActionList() { return ActionList; }
+	
 };

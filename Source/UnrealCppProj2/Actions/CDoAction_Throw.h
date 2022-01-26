@@ -23,4 +23,8 @@ public:
 
 private:
 	class UCAim* Aim;
+
+private:
+	UFUNCTION()
+		void OnThrowBeginOverlap(FHitResult InHitResult);
 };

@@ -26,6 +26,7 @@ private:
 	class USpringArmComponent* SpringArm;
 	class UCameraComponent* Camera;
 	class UCurveFloat* Curve;
+	class ACHUD* Hud;
 
 public:
 	FORCEINLINE bool IsAvailable() { return SpringArm != NULL && Camera != NULL; }
